@@ -14,7 +14,54 @@ model User {
   id        String   @id @default(uuid())
   username  String   @unique
   name      String
+  email     String?  @unique
+  avatarUrl String?  @map("avatar_url")
   createdAt DateTime @default(now()) @map("created_at")
 
+  accounts      Account[]
+  sessions      Session[]
+  timeIntervals UserTimeInterval[]
+
   @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refreshToken      String? @map("refresh_token")
+  accessToken       String? @map("access_token")
+  expiresAt         Int?    @map("expires_at")
+  tokenType         String? @map("token_type")
+  scope             String?
+  idToken           String? @map("id_token")
+  sessionState      String? @map("session_state")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model UserTimeInterval {
+  id                 String @id @default(uuid())
+  weekDay            Int    @map("week_day")
+  timeStartInMinutes Int    @map("time_start_in_minutes")
+  timeEndInMinutes   Int    @map("time_end_in_minutes")
+  userId             String @map("user_id")
+  user               User   @relation(fields: [userId], references: [id])
+
+  @@map("user_time_interval")
 }
