@@ -27,3 +27,19 @@ export async function createNewIntervals(
   })
   return response
 }
+
+export async function updateUserById(bio: string) {
+  const response = await api.put('/users/profile', {
+    bio,
+  })
+  return response
+}
+
+export async function getHoursAvailability(username: string, date: string) {
+  const response = await api.get(`/users/${username}/availability`, {
+    params: {
+      date,
+    },
+  })
+  return response
+}

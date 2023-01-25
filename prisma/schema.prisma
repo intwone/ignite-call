@@ -5,6 +5,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -14,6 +18,7 @@ model User {
   id        String   @id @default(uuid())
   username  String   @unique
   name      String
+  bio       String?
   email     String?  @unique
   avatarUrl String?  @map("avatar_url")
   createdAt DateTime @default(now()) @map("created_at")
@@ -21,6 +26,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   timeIntervals UserTimeInterval[]
+  Scheduling    Scheduling[]
 
   @@map("users")
 }
@@ -63,5 +69,18 @@ model UserTimeInterval {
   userId             String @map("user_id")
   user               User   @relation(fields: [userId], references: [id])
 
-  @@map("user_time_interval")
+  @@map("user_time_intervals")
+}
+
+model Scheduling {
+  id           String   @id @default(uuid())
+  date         DateTime
+  name         String
+  email        String
+  observations String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+
+  @@map("schedulings")
 }

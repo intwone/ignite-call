@@ -1,0 +1,73 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table users {
+  id String [pk]
+  username String [unique, not null]
+  name String [not null]
+  bio String
+  email String [unique]
+  avatarUrl String
+  createdAt DateTime [default: `now()`, not null]
+  accounts accounts [not null]
+  sessions sessions [not null]
+  timeIntervals user_time_intervals [not null]
+  Scheduling schedulings [not null]
+}
+
+Table accounts {
+  id String [pk]
+  userId String [not null]
+  type String [not null]
+  provider String [not null]
+  providerAccountId String [not null]
+  refreshToken String
+  accessToken String
+  expiresAt Int
+  tokenType String
+  scope String
+  idToken String
+  sessionState String
+  user users [not null]
+
+  indexes {
+    (provider, providerAccountId) [unique]
+  }
+}
+
+Table sessions {
+  id String [pk]
+  sessionToken String [unique, not null]
+  userId String [not null]
+  expires DateTime [not null]
+  user users [not null]
+}
+
+Table user_time_intervals {
+  id String [pk]
+  weekDay Int [not null]
+  timeStartInMinutes Int [not null]
+  timeEndInMinutes Int [not null]
+  userId String [not null]
+  user users [not null]
+}
+
+Table schedulings {
+  id String [pk]
+  date DateTime [not null]
+  name String [not null]
+  email String [not null]
+  observations String
+  createdAt DateTime [default: `now()`, not null]
+  userId String [not null]
+  user users [not null]
+}
+
+Ref: accounts.userId > users.id [delete: Cascade]
+
+Ref: sessions.userId > users.id [delete: Cascade]
+
+Ref: user_time_intervals.userId > users.id
+
+Ref: schedulings.userId > users.id

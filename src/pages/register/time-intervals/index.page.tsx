@@ -9,6 +9,7 @@ import {
   Text,
   TextInput,
 } from '@ignite-ui/react'
+import { useRouter } from 'next/router'
 import { ArrowRight } from 'phosphor-react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { Container, Header } from '../styles'
@@ -56,10 +57,12 @@ export default function TimeIntervals() {
   })
 
   const weekDays = getWeekDays()
+  const router = useRouter()
 
   async function handleSetTimeIntervals(data: any) {
     const { intervals } = data as TimeIntervalsFormOutput
     await createNewIntervals(intervals)
+    await router.push('/register/update-profile')
   }
 
   return (
