@@ -11,6 +11,12 @@ interface CreateNewIntervalsParams {
   endTimeInMinutes: number
 }
 
+interface GetBlockedDatesParams {
+  username: string
+  month: string
+  year: number
+}
+
 export async function createNewUser({ name, username }: CreateNewUserParams) {
   const response = await api.post('/users', {
     name,
@@ -39,6 +45,21 @@ export async function getHoursAvailability(username: string, date: string) {
   const response = await api.get(`/users/${username}/availability`, {
     params: {
       date,
+    },
+  })
+  return response
+}
+
+export async function getBlockedDates({
+  username,
+  month,
+  year,
+}: GetBlockedDatesParams) {
+  const response = await api.get(`/users/${username}/blocked-dates`, {
+    params: {
+      username,
+      month,
+      year,
     },
   })
   return response
