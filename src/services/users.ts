@@ -17,6 +17,14 @@ interface GetBlockedDatesParams {
   year: number
 }
 
+interface CreateSchedulingProps {
+  username: string
+  name: string
+  email: string
+  observations: string | null
+  date: Date
+}
+
 export async function createNewUser({ name, username }: CreateNewUserParams) {
   const response = await api.post('/users', {
     name,
@@ -61,6 +69,22 @@ export async function getBlockedDates({
       month,
       year,
     },
+  })
+  return response
+}
+
+export async function createScheduling({
+  email,
+  name,
+  observations,
+  username,
+  date,
+}: CreateSchedulingProps) {
+  const response = await api.post(`/users/${username}/schedule`, {
+    name,
+    email,
+    observations,
+    date,
   })
   return response
 }
